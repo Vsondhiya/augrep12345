@@ -4,7 +4,19 @@ trigger:
 pool: vinsontosh_agent_pool
 
 
+
 steps:
+
+    
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'init'
+    backendServiceArm: 'vinsanserviceconnection'
+    backendAzureRmStorageAccountName: 'vinsanstorageacc'
+    backendAzureRmContainerName: 'vinsancontainer'
+    backendAzureRmKey: 'vinsan.terraform.tfstate'
+
 - task: TerraformTask@5
   inputs:
     provider: 'azurerm'
@@ -17,11 +29,3 @@ steps:
     outputTo: 'console'
     customCommand: 'fmt'
     environmentServiceNameAzureRM: 'vinsanserviceconnection'
-- task: TerraformTask@5
-  inputs:
-    provider: 'azurerm'
-    command: 'init'
-    backendServiceArm: 'vinsanserviceconnection'
-    backendAzureRmStorageAccountName: 'vinsanstorageacc'
-    backendAzureRmContainerName: 'vinsancontainer'
-    backendAzureRmKey: 'vinsan.terraform.tfstate'
