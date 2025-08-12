@@ -8,6 +8,18 @@ steps:
 - task: TerraformTask@5
   inputs:
     provider: 'azurerm'
+    command: 'validate'
+
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
+    command: 'custom'
+    outputTo: 'console'
+    customCommand: 'fmt'
+    environmentServiceNameAzureRM: 'vinsanserviceconnection'
+- task: TerraformTask@5
+  inputs:
+    provider: 'azurerm'
     command: 'init'
     backendServiceArm: 'vinsanserviceconnection'
     backendAzureRmStorageAccountName: 'vinsanstorageacc'
