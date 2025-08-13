@@ -6,8 +6,6 @@ trigger:
 
 pool: vinsontosh_agent_pool
 
-
-
 steps:
 
 - task: TerraformInstaller@1
