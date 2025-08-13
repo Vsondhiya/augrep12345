@@ -1,5 +1,8 @@
 trigger:
-- main
+  branches:
+    include:
+      - feature/*
+      - main
 
 pool: vinsontosh_agent_pool
 
@@ -44,3 +47,12 @@ steps:
     provider: 'azurerm'
     command: 'plan'
     environmentServiceNameAzureRM: 'vinsanserviceconnection'
+
+- task: TerraformTask@5
+  displayName: 'terraform apply chal raha'
+  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+  inputs:
+    provider: 'azurerm'
+    command: 'apply'
+    environmentServiceNameAzureRM: 'vinsanserviceconnection'
+    commandOptions: '-auto-approve'
