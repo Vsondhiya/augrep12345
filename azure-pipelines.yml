@@ -8,10 +8,12 @@ pool: vinsontosh_agent_pool
 steps:
 
 - task: TerraformInstaller@1
+  displayName: 'install ho raha hai'
   inputs:
     terraformVersion: 'latest'
     
 - task: TerraformTask@5
+  displayName: 'init chal raha hai'
   inputs:
     provider: 'azurerm'
     command: 'init'
@@ -21,14 +23,24 @@ steps:
     backendAzureRmKey: 'vinsan.terraform.tfstate'
 
 - task: TerraformTask@5
+  displayName: 'validate chal raha hai '
   inputs:
     provider: 'azurerm'
     command: 'validate'
 
 - task: TerraformTask@5
+  displayName: 'fmt chal raha hai '
   inputs:
     provider: 'azurerm'
     command: 'custom'
     outputTo: 'console'
     customCommand: 'fmt'
+    environmentServiceNameAzureRM: 'vinsanserviceconnection'
+
+
+- task: TerraformTask@5
+  displayName: 'plan chal raha hai '
+  inputs:
+    provider: 'azurerm'
+    command: 'plan'
     environmentServiceNameAzureRM: 'vinsanserviceconnection'
