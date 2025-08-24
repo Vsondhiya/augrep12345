@@ -48,8 +48,12 @@ jobs:
       command: 'plan'
       environmentServiceNameAzureRM: 'vinsanserviceconnection'
   
-
-
+- job: Jobofscannin
+  displayName: Job of scanning
+  steps:
+  - task: tfsec@1
+    inputs:
+      version: 'v1.26.0'
 
 - job: Jobofapply
   displayName: Job of apply
