@@ -48,7 +48,7 @@ jobs:
       command: 'plan'
       environmentServiceNameAzureRM: 'vinsanserviceconnection'
   
-- job: Jobofscannin
+- job: Jobofscanning
   displayName: Job of scanning
   steps:
   - task: tfsec@1
@@ -60,7 +60,7 @@ jobs:
   steps:
   - task: TerraformTask@5
     displayName: 'terraform apply chal raha'
-    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
     inputs:
       provider: azurerm
       command: 'apply'
