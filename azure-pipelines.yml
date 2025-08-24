@@ -6,53 +6,59 @@ trigger:
 
 pool: vinsontosh_agent_pool
 
+jobs:
+- job: JobofBuild
+  displayName: build chal raha hai
+  steps:
+  - task: TerraformInstaller@1
+    displayName: 'install ho raha hai'
+    inputs:
+      terraformVersion: 'latest'
+      
+  - task: TerraformTask@5
+    displayName: 'init chal raha hai'
+    inputs:
+      provider: azurerm
+      command: 'init'
+      backendServiceArm: 'vinsanserviceconnection'
+      backendAzureRmStorageAccountName: 'vinsanstorageacc'
+      backendAzureRmContainerName: 'vinsancontainer'
+      backendAzureRmKey: 'vinsan.terraform.tfstate'
+
+  - task: TerraformTask@5
+    displayName: 'validate chal raha hai '
+    inputs:
+      provider: azurerm
+      command: 'validate'
+
+  - task: TerraformTask@5
+    displayName: 'fmt chal raha hai '
+    inputs:
+      provider: azurerm
+      command: 'custom'
+      outputTo: 'console'
+      customCommand: 'fmt'
+      environmentServiceNameAzureRM: 'vinsanserviceconnection'
 
 
-steps:
-
-- task: TerraformInstaller@1
-  displayName: 'install ho raha hai'
-  inputs:
-    terraformVersion: 'latest'
-    
-- task: TerraformTask@5
-  displayName: 'init chal raha hai'
-  inputs:
-    provider: azurerm
-    command: 'init'
-    backendServiceArm: 'vinsanserviceconnection'
-    backendAzureRmStorageAccountName: 'vinsanstorageacc'
-    backendAzureRmContainerName: 'vinsancontainer'
-    backendAzureRmKey: 'vinsan.terraform.tfstate'
-
-- task: TerraformTask@5
-  displayName: 'validate chal raha hai '
-  inputs:
-    provider: azurerm
-    command: 'validate'
-
-- task: TerraformTask@5
-  displayName: 'fmt chal raha hai '
-  inputs:
-    provider: azurerm
-    command: 'custom'
-    outputTo: 'console'
-    customCommand: 'fmt'
-    environmentServiceNameAzureRM: 'vinsanserviceconnection'
+  - task: TerraformTask@5
+    displayName: 'plan chal raha hai '
+    inputs:
+      provider: azurerm
+      command: 'plan'
+      environmentServiceNameAzureRM: 'vinsanserviceconnection'
+  
 
 
-- task: TerraformTask@5
-  displayName: 'plan chal raha hai '
-  inputs:
-    provider: azurerm
-    command: 'plan'
-    environmentServiceNameAzureRM: 'vinsanserviceconnection'
 
-- task: TerraformTask@5
-  displayName: 'terraform apply chal raha'
-  condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
-  inputs:
-    provider: azurerm
-    command: 'apply'
-    environmentServiceNameAzureRM: 'vinsanserviceconnection'
-    commandOptions: '-auto-approve'
+- job: Jobofapply
+  displayName: Job of apply
+  steps:
+  - task: TerraformTask@5
+    displayName: 'terraform apply chal raha'
+    condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
+    inputs:
+      provider: azurerm
+      command: 'apply'
+      environmentServiceNameAzureRM: 'vinsanserviceconnection'
+      commandOptions: '-auto-approve'
