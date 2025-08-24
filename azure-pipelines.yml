@@ -6,6 +6,8 @@ trigger:
 
 pool: vinsontosh_agent_pool
 
+
+
 steps:
 
 - task: TerraformInstaller@1
@@ -16,7 +18,7 @@ steps:
 - task: TerraformTask@5
   displayName: 'init chal raha hai'
   inputs:
-    provider: 'azurerm'
+    provider: azurerm
     command: 'init'
     backendServiceArm: 'vinsanserviceconnection'
     backendAzureRmStorageAccountName: 'vinsanstorageacc'
@@ -26,13 +28,13 @@ steps:
 - task: TerraformTask@5
   displayName: 'validate chal raha hai '
   inputs:
-    provider: 'azurerm'
+    provider: azurerm
     command: 'validate'
 
 - task: TerraformTask@5
   displayName: 'fmt chal raha hai '
   inputs:
-    provider: 'azurerm'
+    provider: azurerm
     command: 'custom'
     outputTo: 'console'
     customCommand: 'fmt'
@@ -42,7 +44,7 @@ steps:
 - task: TerraformTask@5
   displayName: 'plan chal raha hai '
   inputs:
-    provider: 'azurerm'
+    provider: azurerm
     command: 'plan'
     environmentServiceNameAzureRM: 'vinsanserviceconnection'
 
@@ -50,7 +52,7 @@ steps:
   displayName: 'terraform apply chal raha'
   condition: eq(variables['Build.SourceBranch'], 'refs/heads/main')
   inputs:
-    provider: 'azurerm'
+    provider: azurerm
     command: 'apply'
     environmentServiceNameAzureRM: 'vinsanserviceconnection'
     commandOptions: '-auto-approve'
