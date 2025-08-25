@@ -6,6 +6,11 @@ trigger:
 
 pool: vinsontosh_agent_pool
 
+parameters:
+  - name: Code_Scanner
+    type: boolean
+    default: false
+
 jobs:
 - job: JobofBuild
   displayName: build chal raha hai
@@ -50,6 +55,7 @@ jobs:
   
 - job: Jobofscanning
   displayName: Job of scanning
+  condition: eq(${{ parameters.Code_Scanner }}, true)
   steps:
   - task: tfsec@1
     inputs:
