@@ -64,7 +64,8 @@ jobs:
 
 - job: Jobofapply
   displayName: Job of apply
-  condition: and(succeeded('Build.JobofBuild'), eq(variables['Build.SourceBranchName'], 'main'))
+  dependsOn: JobofBuild
+  condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
   steps:
   - task: TerraformTask@5
     inputs:
