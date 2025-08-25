@@ -68,6 +68,7 @@ jobs:
   condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
   steps:
   - task: TerraformTask@5
+    displayName: 'terraform init dubara chal raha'
     inputs:
       provider: 'azurerm'
       command: 'init'
