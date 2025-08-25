@@ -67,15 +67,6 @@ jobs:
   dependsOn: JobofBuild
   condition: and(succeeded(), eq(variables['Build.SourceBranchName'], 'main'))
   steps:
-  - task: TerraformTask@5
-    displayName: 'terraform init dubara chal raha'
-    inputs:
-      provider: 'azurerm'
-      command: 'init'
-      backendServiceArm: 'vinsanserviceconnection'
-      backendAzureRmStorageAccountName: 'vinsanstorageacc'
-      backendAzureRmContainerName: 'vinsancontainer'
-      backendAzureRmKey: 'vinsan.terraform.tfstate'
 
   - task: TerraformTask@5
     displayName: 'terraform apply chal raha'    
