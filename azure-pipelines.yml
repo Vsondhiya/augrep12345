@@ -55,9 +55,11 @@ jobs:
     inputs:
       version: 'v1.26.0'
 
-- job: Jobofinit
-  displayName: Job of init
-  steps:     
+
+- job: Jobofapply
+  displayName: Job of apply
+  steps:
+   
   - task: TerraformTask@5
     displayName: 'init chal raha hai'
     inputs:
@@ -68,10 +70,6 @@ jobs:
       backendAzureRmContainerName: 'vinsancontainer'
       backendAzureRmKey: 'vinsan.terraform.tfstate'
 
-
-- job: Jobofapply
-  displayName: Job of apply
-  steps:
   - task: TerraformTask@5
     displayName: 'terraform apply chal raha'
     condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
