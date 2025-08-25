@@ -64,6 +64,7 @@ jobs:
 
 - job: Jobofapply
   displayName: Job of apply
+  condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
   steps:
    
   - task: TerraformTask@5
@@ -77,8 +78,7 @@ jobs:
       backendAzureRmKey: 'vinsan.terraform.tfstate'
 
   - task: TerraformTask@5
-    displayName: 'terraform apply chal raha'
-    condition: and(succeeded(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))
+    displayName: 'terraform apply chal raha'    
     inputs:
       provider: azurerm
       command: 'apply'
