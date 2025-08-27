@@ -76,8 +76,7 @@ jobs:
       backendAzureRmStorageAccountName: 'vinsanstorageacc'
       backendAzureRmContainerName: 'vinsancontainer'
       backendAzureRmKey: 'vinsan.terraform.tfstate'
-      workingDirectory: '$(System.DefaultWorkingDirectory)'
-      commandOptions: '-reconfigure'
+    
 
   - task: TerraformTask@5
     displayName: 'terraform apply chal raha'    
