@@ -65,9 +65,26 @@ stages:
       inputs:
         version: 'v1.26.0'
 
-- stage: Apply
+- stage: ManualApproval
   dependsOn: Build
-  condition: and(succeeded('Build'), eq(variables['Build.SourceBranchName'], 'main'))
+  jobs:
+  - job: ApprovalJob
+    displayName: "Manual Validation Required"
+    pool: server
+    steps:
+    - task: ManualValidation@0
+      inputs:
+        notifyUsers: |
+          vsondhiya@gmail.com
+        instructions: 'Please validate the Terraform plan before applying.'
+        onTimeout: 'reject'
+        timeout: '1d'   
+
+    
+
+- stage: Apply
+  dependsOn: ManualApproval
+  condition: and(succeeded('ManualApproval'), eq(variables['Build.SourceBranchName'], 'main'))
   jobs:
   - job: Jobofapply
     displayName: Job of apply
