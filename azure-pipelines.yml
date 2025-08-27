@@ -66,8 +66,23 @@ jobs:
   dependsOn: JobofBuild
   condition: and(succeeded('JobofBuild'), eq(variables['Build.SourceBranchName'], 'main'))
   steps:
+  - task: TerraformInstaller@1
+    displayName: 'Terraform install ho raha hai'
+    inputs:
+      terraformVersion: 'latest'
+
   - task: TerraformTask@5
-    displayName: 'Terraform apply chal raha hai'
+    displayName: 'Terraform init (apply ke liye)'
+    inputs:
+      provider: 'azurerm'
+      command: 'init'
+      backendServiceArm: 'vinsanserviceconnection'
+      backendAzureRmStorageAccountName: 'vinsanstgacc'
+      backendAzureRmContainerName: 'vinsancontainer'
+      backendAzureRmKey: 'vinsan.terraform.tfstate'
+    
+  - task: TerraformTask@5
+    displayName: 'Terraform apply chal raha hai'    
     inputs:
       provider: azurerm
       command: 'apply'
