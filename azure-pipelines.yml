@@ -9,7 +9,7 @@ pool: vinsontosh_agent_pool
 parameters:
   - name: Code_Scanner
     type: boolean
-    default: false
+    default: true
 
 stages:
 - stage: Build
@@ -57,10 +57,10 @@ stages:
 
 - stage: Scanning
   dependsOn: []
+  condition: eq(${{ parameters.Code_Scanner }}, true)
   jobs:
   - job: Jobofscanning
     displayName: Job of scanning
-    condition: eq(${{ parameters.Code_Scanner }}, true)
     steps:
     - task: tfsec@1
       inputs:
