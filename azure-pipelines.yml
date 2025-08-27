@@ -1,0 +1,115 @@
+trigger:
+  branches:
+    include:
+      - 'feature/*'
+      - main
+
+pool: vinsontosh_agent_pool
+
+parameters:
+  - name: Code_Scanner
+    type: boolean
+    default: true
+
+stages:
+- stage: Build
+  jobs:
+  - job: JobofBuild
+    displayName: build chal raha hai
+    steps:
+    - task: TerraformInstaller@1
+      displayName: 'install ho raha hai'
+      inputs:
+        terraformVersion: 'latest'
+        
+    - task: TerraformTask@5
+      displayName: 'init chal raha hai'
+      inputs:
+        provider: azurerm
+        command: 'init'
+        backendServiceArm: 'vinsanserviceconnection'
+        backendAzureRmStorageAccountName: 'vinsanstgacc'
+        backendAzureRmContainerName: 'vinsancontainer'
+        backendAzureRmKey: 'vinsan.terraform.tfstate'
+
+    - task: TerraformTask@5
+      displayName: 'validate chal raha hai '
+      inputs:
+        provider: azurerm
+        command: 'validate'
+
+    - task: TerraformTask@5
+      displayName: 'fmt chal raha hai '
+      inputs:
+        provider: azurerm
+        command: 'custom'
+        outputTo: 'console'
+        customCommand: 'fmt'
+        environmentServiceNameAzureRM: 'vinsanserviceconnection'
+
+
+    - task: TerraformTask@5
+      displayName: 'plan chal raha hai '
+      inputs:
+        provider: azurerm
+        command: 'plan'
+        environmentServiceNameAzureRM: 'vinsanserviceconnection'
+
+- stage: Scanning
+  condition: eq(${{ parameters.Code_Scanner }}, true)
+  jobs:
+  - job: Jobofscanning
+    displayName: Job of scanning
+    steps:
+    - task: tfsec@1
+      inputs:
+        version: 'v1.26.0'
+
+- stage: ManualApproval
+  dependsOn: Build
+  jobs:
+  - job: ApprovalJob
+    displayName: "Manual Validation Required"
+    pool: server
+    steps:
+    - task: ManualValidation@0
+      inputs:
+        notifyUsers: |
+          vsondhiya@gmail.com
+        instructions: 'Please validate the Terraform plan before applying.'
+        onTimeout: 'reject'
+        timeout: '1d'   
+
+    
+
+- stage: Apply
+  dependsOn: ManualApproval
+  condition: and(succeeded('ManualApproval'), eq(variables['Build.SourceBranchName'], 'main'))
+  jobs:
+  - job: Jobofapply
+    displayName: Job of apply
+
+    steps:
+    - task: TerraformInstaller@1
+      displayName: 'Terraform install ho raha hai'
+      inputs:
+        terraformVersion: 'latest'
+
+    - task: TerraformTask@5
+      displayName: 'Terraform init (apply ke liye)'
+      inputs:
+        provider: 'azurerm'
+        command: 'init'
+        backendServiceArm: 'vinsanserviceconnection'
+        backendAzureRmStorageAccountName: 'vinsanstgacc'
+        backendAzureRmContainerName: 'vinsancontainer'
+        backendAzureRmKey: 'vinsan.terraform.tfstate'
+      
+    - task: TerraformTask@5
+      displayName: 'Terraform apply chal raha hai'    
+      inputs:
+        provider: azurerm
+        command: 'apply'
+        environmentServiceNameAzureRM: 'vinsanserviceconnection'
+        commandOptions: '-auto-approve'
+        workingDirectory: '$(System.DefaultWorkingDirectory)'
