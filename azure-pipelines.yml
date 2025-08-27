@@ -54,6 +54,7 @@ stages:
         provider: azurerm
         command: 'plan'
         environmentServiceNameAzureRM: 'vinsanserviceconnection'
+
 - stage: Scanning
   jobs:
   - job: Jobofscanning
@@ -66,7 +67,7 @@ stages:
 
 - stage: Apply
   dependsOn: Build
-  condition: and(succeeded('JobofBuild'), eq(variables['Build.SourceBranchName'], 'main'))
+  condition: and(succeeded('Build'), eq(variables['Build.SourceBranchName'], 'main'))
   jobs:
   - job: Jobofapply
     displayName: Job of apply
