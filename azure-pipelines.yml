@@ -56,8 +56,6 @@ stages:
         environmentServiceNameAzureRM: 'vinsanserviceconnection'
 
 - stage: Scanning
-  pool: Azure Pipelines
-  dependsOn: []
   condition: eq(${{ parameters.Code_Scanner }}, true)
   jobs:
   - job: Jobofscanning
