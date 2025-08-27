@@ -26,7 +26,7 @@ jobs:
       provider: azurerm
       command: 'init'
       backendServiceArm: 'vinsanserviceconnection'
-      backendAzureRmStorageAccountName: 'vinsanstorageacc'
+      backendAzureRmStorageAccountName: 'vinsanstgacc'
       backendAzureRmContainerName: 'vinsancontainer'
       backendAzureRmKey: 'vinsan.terraform.tfstate'
 
@@ -73,7 +73,7 @@ jobs:
       provider: 'azurerm'
       command: 'init'
       backendServiceArm: 'vinsanserviceconnection'
-      backendAzureRmStorageAccountName: 'vinsanstorageacc'
+      backendAzureRmStorageAccountName: 'vinsanstgacc'
       backendAzureRmContainerName: 'vinsancontainer'
       backendAzureRmKey: 'vinsan.terraform.tfstate'
     
